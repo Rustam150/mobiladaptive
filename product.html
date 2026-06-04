@@ -34,8 +34,6 @@
     </div>
   </header>
 
-  <div class="breadcrumbs container" id="breadcrumbs"></div>
-
   <article class="product-page" id="product-root">
     <div class="empty-state"><p>Товар не найден</p><a href="catalog.html" class="btn btn--outline">В каталог</a></div>
   </article>
@@ -64,10 +62,6 @@
     } else {
       document.title = `${product.name} — HERMITAGE DECOR`;
       document.body.dataset.pageTitle = product.name;
-      requestAnimationFrame(() => {
-        const toolbarTitle = document.querySelector('.page-toolbar__title');
-        if (toolbarTitle) toolbarTitle.textContent = product.name;
-      });
       const isFav = Store.isFavorite(product.id);
       const stock = product.inStock ? 'В наличии' : 'Под заказ';
 
@@ -90,17 +84,7 @@
             ${product.isSale ? '<span class="badge badge--sale" style="position:static;display:inline-block;margin-bottom:12px;">Акция</span>' : ''}
             <h1>${product.name}</h1>
             <p class="product-info__price">${formatPrice(product.price)}</p>
-            <div class="product-specs">
-              <dl>
-                <dt>Страна</dt><dd>${product.country}</dd>
-                <dt>Фабрика</dt><dd>${product.factory}</dd>
-                <dt>Артикул</dt><dd>${product.sku}</dd>
-                <dt>Размеры</dt><dd>${product.sizes}</dd>
-                <dt>Материал</dt><dd>${product.material}</dd>
-                <dt>Цвет</dt><dd>${product.color}</dd>
-                <dt>Наличие</dt><dd>${stock}</dd>
-              </dl>
-            </div>
+            
             <div class="product-actions">
               <button type="button" class="btn btn--primary btn--block" id="add-cart">Добавить в корзину</button>
               <a href="${productWhatsAppUrl(product)}" class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">Заказать через WhatsApp</a>
@@ -129,9 +113,6 @@
             </div>
           </div>
         </div>`;
-
-      document.getElementById('breadcrumbs').innerHTML =
-        `<a href="index.html">Главная</a> / <a href="catalog.html">Каталог</a> / ${product.name}`;
 
       root.querySelectorAll('.product-gallery__thumbs button').forEach((btn) => {
         btn.addEventListener('click', () => {
