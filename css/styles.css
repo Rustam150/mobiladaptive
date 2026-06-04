@@ -1405,3 +1405,46 @@ body.menu-open::after {
   z-index: 102 !important;
   position: relative;
 }
+
+/* ===== ФИКСЫ ДЛЯ КАРТОЧЕК ТОВАРОВ ===== */
+
+/* Защита от вырезания контента */
+.product-card__body {
+  padding: 12px;
+  overflow: visible;
+}
+
+.product-card__media {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.product-card__media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* Чтобы цена не обрезалась */
+.product-card__price {
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Кнопка "Подробнее" не вылезает */
+.product-card__body .btn {
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin-top: 8px;
+}
+
+/* Скрываем лишнее, если что-то вырывается */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
