@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Каталог — HERMITAGE DECOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page-back="index.html" data-page-title="Каталог">
+  <header class="site-header site-header--solid">
+    <div class="site-header__inner">
+      <button class="nav-toggle" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+      <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="catalog.html?new=1">Новинки</a></li>
+          <li><a href="catalog.html?sale=1">Акции</a></li>
+          <li><a href="index.html#about">О компании</a></li>
+          <li><a href="index.html#footer">Контакты</a></li>
+          <li><a href="account.html">Личный кабинет</a></li>
+          <li><a href="favorites.html">Избранное</a></li>
+          <li><a href="compare.html">Сравнение</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" data-search-open aria-label="Поиск"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg></button>
+        <a href="favorites.html" class="icon-btn" aria-label="Избранное"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span class="badge-count" data-fav-count hidden>0</span></a>
+        <a href="account.html" class="icon-btn" aria-label="Кабинет"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM3 21v-1a9 9 0 0118 0v1"/></svg></a>
+        <a href="cart.html" class="icon-btn" aria-label="Корзина"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg><span class="badge-count" data-cart-count hidden>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-panel"><div class="search-panel__box"><input type="search" id="global-search" placeholder="Поиск..." /><button type="button" class="btn btn--primary btn--sm" data-search-close>Закрыть</button></div></div>
+
+  <div class="breadcrumbs container"><a href="index.html">Главная</a> / Каталог</div>
+  <header class="page-header"><div class="container"><h1 id="page-title">Каталог</h1></div></header>
+
+  <div class="container catalog-layout">
+    <button type="button" class="filters-toggle" id="filters-open">Фильтры</button>
+    <aside class="filters-panel" id="filters-panel">
+      <button type="button" class="filters-panel__close" id="filters-close" aria-label="Закрыть">×</button>
+      <form id="filters-form">
+        <div class="filter-group">
+          <label>Цена от</label>
+          <input type="number" name="minPrice" placeholder="0" min="0" step="1000" />
+        </div>
+        <div class="filter-group">
+          <label>Цена до</label>
+          <input type="number" name="maxPrice" placeholder="1000000" min="0" step="1000" />
+        </div>
+        <div class="filter-group">
+          <label>Страна</label>
+          <select name="country"><option value="">Все</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Фабрика</label>
+          <select name="factory"><option value="">Все</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Цвет</label>
+          <select name="color"><option value="">Все</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Материал</label>
+          <select name="material"><option value="">Все</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Наличие</label>
+          <select name="inStock">
+            <option value="">Все</option>
+            <option value="yes">В наличии</option>
+            <option value="no">Под заказ</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Применить</button>
+        <button type="button" class="btn btn--outline btn--block mt-2" id="filters-reset">Сбросить</button>
+      </form>
+    </aside>
+    <main class="catalog-main">
+      <div class="catalog-toolbar">
+        <p id="results-count" style="font-size: 14px; color: var(--text-secondary);"></p>
+        <select id="sort-select" aria-label="Сортировка">
+          <option value="popular">По популярности</option>
+          <option value="price-asc">По цене: сначала дешевле</option>
+          <option value="price-desc">По цене: сначала дороже</option>
+          <option value="new">По новизне</option>
+        </select>
+      </div>
+      <div class="products-grid" id="catalog-grid" style="margin-top: 24px;"></div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-logo">HERMITAGE DECOR</div>
+        <div class="footer-contacts" style="margin-top: 20px;">
+          <p><a href="tel:+79001234567">+7 (900) 123-45-67</a></p>
+          <p><a href="https://wa.me/79001234567">WhatsApp</a></p>
+          <p><a href="mailto:info@hermitage-decor.ru">info@hermitage-decor.ru</a></p>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#footer">Доставка</a>
+        <a href="index.html#footer">Оплата</a>
+        <a href="index.html#footer">Политика конфиденциальности</a>
+      </div>
+    </div>
+    <div class="container footer-copy">© 2026 HERMITAGE DECOR</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const params = getQueryParams();
+    const form = document.getElementById('filters-form');
+
+    const countries = [...new Set(HERMITAGE.products.map((p) => p.country))];
+    const factories = [...new Set(HERMITAGE.products.map((p) => p.factory))];
+    const colors = [...new Set(HERMITAGE.products.map((p) => p.color))];
+    const materials = [...new Set(HERMITAGE.products.map((p) => p.material.split(',')[0].trim()))];
+
+    const fillSelect = (name, items) => {
+      const sel = form.elements[name];
+      items.forEach((v) => {
+        const o = document.createElement('option');
+        o.value = v;
+        o.textContent = v;
+        sel.appendChild(o);
+      });
+    };
+    fillSelect('country', countries);
+    fillSelect('factory', factories);
+    fillSelect('color', colors);
+    fillSelect('material', materials);
+
+    if (params.category) {
+      const cat = HERMITAGE.categories.find((c) => c.id === params.category);
+      if (cat) document.getElementById('page-title').textContent = cat.name;
+    }
+    if (params.new) document.getElementById('page-title').textContent = 'Новинки';
+    if (params.sale) document.getElementById('page-title').textContent = 'Акции';
+    if (params.search) document.getElementById('page-title').textContent = `Поиск: ${params.search}`;
+
+    function getFilters() {
+      const fd = new FormData(form);
+      return {
+        category: params.category || '',
+        country: fd.get('country') || params.country || '',
+        factory: fd.get('factory') || '',
+        color: fd.get('color') || '',
+        material: fd.get('material') || '',
+        inStock: fd.get('inStock') || '',
+        minPrice: fd.get('minPrice') || '',
+        maxPrice: fd.get('maxPrice') || '',
+        new: params.new ? '1' : '',
+        sale: params.sale ? '1' : '',
+        search: params.search || '',
+      };
+    }
+
+    function render() {
+      const f = getFilters();
+      const list = filterProducts(
+        { ...f, category: params.category || '' },
+        document.getElementById('sort-select').value
+      );
+      const grid = document.getElementById('catalog-grid');
+      grid.innerHTML = list.length
+        ? list.map((p) => renderProductCard(p)).join('')
+        : '<div class="empty-state" style="grid-column:1/-1;"><p>Товары не найдены</p></div>';
+      document.getElementById('results-count').textContent = `${list.length} товаров`;
+      initFavButtons(grid);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('filters-panel').classList.remove('is-open');
+      document.querySelector('.filters-backdrop')?.classList.remove('is-open');
+      document.body.classList.remove('filters-open');
+      render();
+    });
+    document.getElementById('sort-select').addEventListener('change', render);
+    document.getElementById('filters-reset').addEventListener('click', () => {
+      form.reset();
+      window.location.href = 'catalog.html';
+    });
+    if (params.country) form.elements.country.value = params.country;
+    if (params.new) {
+      document.body.dataset.pageTitle = 'Новинки';
+      document.getElementById('page-title').textContent = 'Новинки';
+    }
+    if (params.sale) {
+      document.body.dataset.pageTitle = 'Акции';
+      document.getElementById('page-title').textContent = 'Акции';
+    }
+    render();
+  </script>
+</body>
+</html>

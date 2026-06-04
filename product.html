@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Товар — HERMITAGE DECOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page-back="catalog.html" data-page-title="Товар">
+  <header class="site-header site-header--solid">
+    <div class="site-header__inner">
+      <button class="nav-toggle" aria-label="Меню"><span></span><span></span><span></span></button>
+      <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="catalog.html?new=1">Новинки</a></li>
+          <li><a href="catalog.html?sale=1">Акции</a></li>
+          <li><a href="index.html#about">О компании</a></li>
+          <li><a href="index.html#footer">Контакты</a></li>
+          <li><a href="account.html">Личный кабинет</a></li>
+          <li><a href="favorites.html">Избранное</a></li>
+          <li><a href="compare.html">Сравнение</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="favorites.html" class="icon-btn" aria-label="Избранное"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span class="badge-count" data-fav-count hidden>0</span></a>
+        <a href="account.html" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM3 21v-1a9 9 0 0118 0v1"/></svg></a>
+        <a href="cart.html" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span class="badge-count" data-cart-count hidden>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumbs container" id="breadcrumbs"></div>
+
+  <article class="product-page" id="product-root">
+    <div class="empty-state"><p>Товар не найден</p><a href="catalog.html" class="btn btn--outline">В каталог</a></div>
+  </article>
+
+  <section class="section" id="similar-section" hidden>
+    <div class="container">
+      <p class="section__subtitle">Рекомендуем</p>
+      <h2 class="section__title">Похожие товары</h2>
+      <div class="products-grid" id="similar-grid"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-copy">© 2026 HERMITAGE DECOR</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const id = getQueryParams().id;
+    const product = getProduct(id);
+    const root = document.getElementById('product-root');
+
+    if (!product) {
+      root.innerHTML = '<div class="empty-state container"><h2>Товар не найден</h2><a href="catalog.html" class="btn btn--outline">В каталог</a></div>';
+    } else {
+      document.title = `${product.name} — HERMITAGE DECOR`;
+      document.body.dataset.pageTitle = product.name;
+      requestAnimationFrame(() => {
+        const toolbarTitle = document.querySelector('.page-toolbar__title');
+        if (toolbarTitle) toolbarTitle.textContent = product.name;
+      });
+      const isFav = Store.isFavorite(product.id);
+      const stock = product.inStock ? 'В наличии' : 'Под заказ';
+
+      root.innerHTML = `
+        <div class="product-layout">
+          <div class="product-gallery">
+            <div class="product-gallery__main">
+              <img id="main-image" src="${product.images[0]}" alt="${product.name}" />
+            </div>
+            <div class="product-gallery__thumbs">
+              ${product.images.map((img, i) => `
+                <button type="button" class="${i === 0 ? 'is-active' : ''}" data-img="${img}">
+                  <img src="${img}" alt="" />
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div class="product-info">
+            ${product.isNew ? '<span class="badge badge--new" style="position:static;display:inline-block;margin-bottom:12px;">Новинка</span>' : ''}
+            ${product.isSale ? '<span class="badge badge--sale" style="position:static;display:inline-block;margin-bottom:12px;">Акция</span>' : ''}
+            <h1>${product.name}</h1>
+            <p class="product-info__price">${formatPrice(product.price)}</p>
+            <div class="product-specs">
+              <dl>
+                <dt>Страна</dt><dd>${product.country}</dd>
+                <dt>Фабрика</dt><dd>${product.factory}</dd>
+                <dt>Артикул</dt><dd>${product.sku}</dd>
+                <dt>Размеры</dt><dd>${product.sizes}</dd>
+                <dt>Материал</dt><dd>${product.material}</dd>
+                <dt>Цвет</dt><dd>${product.color}</dd>
+                <dt>Наличие</dt><dd>${stock}</dd>
+              </dl>
+            </div>
+            <div class="product-actions">
+              <button type="button" class="btn btn--primary btn--block" id="add-cart">Добавить в корзину</button>
+              <a href="${productWhatsAppUrl(product)}" class="btn btn--whatsapp btn--block" target="_blank" rel="noopener">Заказать через WhatsApp</a>
+              <div style="display:flex;gap:12px;margin-top:8px;">
+                <button type="button" class="btn btn--outline btn--sm" id="toggle-fav">${isFav ? 'В избранном' : 'В избранное'}</button>
+                <button type="button" class="btn btn--outline btn--sm" id="toggle-compare">Сравнить</button>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tabs__nav">
+                <button type="button" class="is-active" data-tab="desc">Описание</button>
+                <button type="button" data-tab="specs">Характеристики</button>
+              </div>
+              <div class="tabs__panel is-active" id="tab-desc"><p>${product.description}</p></div>
+              <div class="tabs__panel" id="tab-specs">
+                <table class="specs-table">
+                  <tr><td>Страна</td><td>${product.country}</td></tr>
+                  <tr><td>Фабрика</td><td>${product.factory}</td></tr>
+                  <tr><td>Артикул</td><td>${product.sku}</td></tr>
+                  <tr><td>Размеры</td><td>${product.sizes}</td></tr>
+                  <tr><td>Материал</td><td>${product.material}</td></tr>
+                  <tr><td>Цвет</td><td>${product.color}</td></tr>
+                  <tr><td>Наличие</td><td>${stock}</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+      document.getElementById('breadcrumbs').innerHTML =
+        `<a href="index.html">Главная</a> / <a href="catalog.html">Каталог</a> / ${product.name}`;
+
+      root.querySelectorAll('.product-gallery__thumbs button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          root.querySelectorAll('.product-gallery__thumbs button').forEach((b) => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          document.getElementById('main-image').src = btn.dataset.img;
+        });
+      });
+
+      root.querySelectorAll('.tabs__nav button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          root.querySelectorAll('.tabs__nav button').forEach((b) => b.classList.remove('is-active'));
+          root.querySelectorAll('.tabs__panel').forEach((p) => p.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          document.getElementById(`tab-${btn.dataset.tab}`).classList.add('is-active');
+        });
+      });
+
+      document.getElementById('add-cart').addEventListener('click', () => {
+        Store.addToCart(product.id);
+        const btn = document.getElementById('add-cart');
+        btn.textContent = 'Добавлено в корзину';
+        setTimeout(() => { btn.textContent = 'Добавить в корзину'; }, 2000);
+      });
+
+      document.getElementById('toggle-fav').addEventListener('click', () => {
+        const active = Store.toggleFavorite(product.id);
+        document.getElementById('toggle-fav').textContent = active ? 'В избранном' : 'В избранное';
+      });
+
+      const compareBtn = document.getElementById('toggle-compare');
+      if (Store.compare().includes(product.id)) {
+        compareBtn.textContent = 'В сравнении';
+      }
+      compareBtn.addEventListener('click', () => {
+        const active = Store.toggleCompare(product.id);
+        compareBtn.textContent = active ? 'В сравнении' : 'Сравнить';
+      });
+
+      const similar = HERMITAGE.products
+        .filter((p) => p.id !== product.id && (p.category === product.category || p.factory === product.factory))
+        .slice(0, 4);
+      if (similar.length) {
+        document.getElementById('similar-section').hidden = false;
+        document.getElementById('similar-grid').innerHTML = similar.map((p) => renderProductCard(p)).join('');
+        initFavButtons(document.getElementById('similar-grid'));
+      }
+    }
+  </script>
+</body>
+</html>

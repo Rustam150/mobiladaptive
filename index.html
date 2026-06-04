@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="HERMITAGE DECOR — мебель и предметы интерьера премиального качества" />
+  <title>HERMITAGE DECOR — Премиальная мебель и интерьер</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header site-header--hero" id="header">
+    <div class="site-header__inner">
+      <button class="nav-toggle" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
+      <nav class="site-nav" aria-label="Основное меню">
+        <ul>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="catalog.html?new=1">Новинки</a></li>
+          <li><a href="catalog.html?sale=1">Акции</a></li>
+          <li><a href="#about">О компании</a></li>
+          <li><a href="#footer">Доставка</a></li>
+          <li><a href="#footer">Контакты</a></li>
+          <li><a href="account.html">Личный кабинет</a></li>
+          <li><a href="favorites.html">Избранное</a></li>
+          <li><a href="compare.html">Сравнение</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" data-search-open aria-label="Поиск">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+        </button>
+        <a href="favorites.html" class="icon-btn" aria-label="Избранное">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span class="badge-count" data-fav-count hidden>0</span>
+        </a>
+        <a href="account.html" class="icon-btn" aria-label="Личный кабинет">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM3 21v-1a9 9 0 0118 0v1"/></svg>
+        </a>
+        <a href="cart.html" class="icon-btn" aria-label="Корзина">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          <span class="badge-count" data-cart-count hidden>0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-panel" role="dialog" aria-label="Поиск">
+    <div class="search-panel__box">
+      <input type="search" id="global-search" placeholder="Поиск мебели, фабрик..." autocomplete="off" />
+      <button type="button" class="btn btn--primary btn--sm" data-search-close>Закрыть</button>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero__bg">
+      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=85" alt="Премиальный интерьер" />
+    </div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h1 class="hero__title">HERMITAGE DECOR</h1>
+      <p class="hero__tagline">Мебель и предметы интерьера премиального качества</p>
+      <div class="btn-group" style="justify-content: center;">
+        <a href="catalog.html" class="btn btn--primary">Смотреть каталог</a>
+        <a href="catalog.html?new=1" class="btn btn--ghost">Новые коллекции</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="categories">
+    <div class="container">
+      <p class="section__subtitle">Коллекции</p>
+      <h2 class="section__title">Категории</h2>
+      <div class="categories-grid" id="categories-grid"></div>
+    </div>
+  </section>
+
+  <section class="section section--alt" style="background: var(--white);">
+    <div class="container">
+      <p class="section__subtitle">Производство</p>
+      <h2 class="section__title">Мировые фабрики</h2>
+      <div class="countries-grid" id="countries-grid"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="slider" data-slider>
+        <div class="slider__header">
+          <div>
+            <p class="section__subtitle">Выбор клиентов</p>
+            <h2 class="section__title">Популярные товары</h2>
+          </div>
+          <div class="slider__nav">
+            <button class="slider__btn" data-slider-prev aria-label="Назад">←</button>
+            <button class="slider__btn" data-slider-next aria-label="Вперёд">→</button>
+          </div>
+        </div>
+        <div class="slider__track" id="popular-slider"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section__subtitle">Коллекция 2026</p>
+      <h2 class="section__title">Новинки</h2>
+      <div class="products-grid" id="new-products"></div>
+      <p class="mt-2" style="text-align: center;">
+        <a href="catalog.html?new=1" class="btn btn--outline">Все новинки</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <a href="catalog.html?sale=1" class="promo-banner">
+        <div class="promo-banner__bg">
+          <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=1200&q=80" alt="Спальня" />
+        </div>
+        <div class="promo-banner__overlay"></div>
+        <div>
+          <h3>Скидки до 30% на мебель для спальни</h3>
+          <span class="btn btn--ghost">Смотреть акции</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section__subtitle">Партнёры</p>
+      <h2 class="section__title">Бренды</h2>
+      <div class="brands-wrap">
+        <div class="brands-track" id="brands-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container about-block">
+      <div class="about-block__image">
+        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80" alt="Салон HERMITAGE DECOR" />
+      </div>
+      <div class="about-block__text">
+        <p class="section__subtitle">О нас</p>
+        <h2 class="section__title">HERMITAGE DECOR</h2>
+        <p>Мы — интерьерный бутик премиального сегмента. Представляем коллекции ведущих европейских и мировых фабрик, помогаем создавать пространства с характером и безупречным вкусом.</p>
+        <p>Каждый предмет в нашем каталоге отобран вручную: от итальянских диванов до эксклюзивной мебели из Турции и Китая.</p>
+        <div class="advantages">
+          <div class="advantage-item">
+            <h4>Премиальные фабрики</h4>
+            <p>Прямые поставки от производителей</p>
+          </div>
+          <div class="advantage-item">
+            <h4>Оригинальная продукция</h4>
+            <p>Сертификаты и гарантия подлинности</p>
+          </div>
+          <div class="advantage-item">
+            <h4>Гарантия качества</h4>
+            <p>Официальная гарантия на всю мебель</p>
+          </div>
+          <div class="advantage-item">
+            <h4>Доставка по России</h4>
+            <p>Бережная доставка и сборка</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-logo">HERMITAGE DECOR</div>
+        <div class="footer-contacts" style="margin-top: 20px;">
+          <p><a href="tel:+79001234567">+7 (900) 123-45-67</a></p>
+          <p><a href="https://wa.me/79001234567" target="_blank" rel="noopener">WhatsApp</a></p>
+          <p><a href="mailto:info@hermitage-decor.ru">info@hermitage-decor.ru</a></p>
+          <p>Москва, ул. Тверская, 12</p>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#footer">Доставка</a>
+        <a href="#footer">Оплата</a>
+        <a href="#footer">Обмен и возврат</a>
+        <a href="#footer">Политика конфиденциальности</a>
+      </div>
+      <div class="footer-links">
+        <a href="catalog.html">Каталог</a>
+        <a href="account.html">Личный кабинет</a>
+        <a href="compare.html">Сравнение</a>
+        <a href="cart.html">Корзина</a>
+      </div>
+    </div>
+    <div class="container footer-copy">© 2026 HERMITAGE DECOR. Все права защищены.</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.getElementById('categories-grid').innerHTML = HERMITAGE.categories
+      .map((c) => `<a href="catalog.html?category=${c.id}" class="category-card"><img src="${c.image}" alt="${c.name}" loading="lazy" /><span class="category-card__label">${c.name}</span></a>`)
+      .join('');
+
+    document.getElementById('countries-grid').innerHTML = HERMITAGE.countries
+      .map((c) => `<a href="catalog.html?country=${encodeURIComponent(c.name)}" class="country-card"><img src="${c.image}" alt="${c.name}" loading="lazy" /><span class="country-card__label">${c.name}</span></a>`)
+      .join('');
+
+    const popular = HERMITAGE.products.filter((p) => p.popular);
+    document.getElementById('popular-slider').innerHTML = popular.map((p) => renderProductCard(p)).join('');
+    initFavButtons(document.getElementById('popular-slider'));
+
+    const newest = HERMITAGE.products.filter((p) => p.isNew).slice(0, 4);
+    document.getElementById('new-products').innerHTML = newest.map((p) => renderProductCard(p)).join('');
+    initFavButtons(document.getElementById('new-products'));
+
+    const brandsHtml = [...HERMITAGE.brands, ...HERMITAGE.brands]
+      .map((b) => `<span class="brand-item">${b}</span>`)
+      .join('');
+    document.getElementById('brands-track').innerHTML = brandsHtml;
+
+    document.getElementById('global-search')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const q = e.target.value.trim();
+        if (q) window.location.href = `catalog.html?search=${encodeURIComponent(q)}`;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Избранное — HERMITAGE DECOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page-back="catalog.html" data-page-title="Избранное">
+  <header class="site-header site-header--solid">
+    <div class="site-header__inner">
+      <button class="nav-toggle" aria-label="Меню"><span></span><span></span><span></span></button>
+      <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="account.html">Личный кабинет</a></li>
+          <li><a href="compare.html">Сравнение</a></li>
+          <li><a href="cart.html">Корзина</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="cart.html" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span class="badge-count" data-cart-count hidden>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <header class="page-header"><div class="container"><h1>Избранное</h1></div></header>
+
+  <div class="container section" style="padding-top: 0;">
+    <div class="products-grid" id="fav-grid"></div>
+  </div>
+
+  <footer class="site-footer"><div class="container footer-copy">© 2026 HERMITAGE DECOR</div></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const products = Store.favorites().map(getProduct).filter(Boolean);
+    const grid = document.getElementById('fav-grid');
+    function renderFav() {
+      const list = Store.favorites().map(getProduct).filter(Boolean);
+      if (!list.length) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h2>Список пуст</h2><p>Сохраняйте понравившиеся товары</p><a href="catalog.html" class="btn btn--primary" style="margin-top:20px;">В каталог</a></div>';
+        return;
+      }
+      grid.innerHTML = list.map((p) => renderProductCard(p)).join('');
+      initFavButtons(grid);
+      grid.querySelectorAll('[data-fav]').forEach((btn) => {
+        btn.addEventListener('click', () => setTimeout(renderFav, 50));
+      });
+    }
+    if (products.length) {
+      renderFav();
+    } else {
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h2>Список пуст</h2><p>Сохраняйте понравившиеся товары</p><a href="catalog.html" class="btn btn--primary" style="margin-top:20px;">В каталог</a></div>';
+    }
+  </script>
+</body>
+</html>

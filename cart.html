@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Корзина — HERMITAGE DECOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page-back="catalog.html" data-page-title="Корзина">
+  <header class="site-header site-header--solid">
+    <div class="site-header__inner">
+      <button class="nav-toggle" aria-label="Меню"><span></span><span></span><span></span></button>
+      <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="index.html#footer">Контакты</a></li>
+          <li><a href="account.html">Личный кабинет</a></li>
+          <li><a href="favorites.html">Избранное</a></li>
+          <li><a href="compare.html">Сравнение</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="favorites.html" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span class="badge-count" data-fav-count hidden>0</span></a>
+        <a href="cart.html" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span class="badge-count" data-cart-count hidden>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Оформление заявки</h1>
+      <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">Онлайн-оплаты нет. После оформления откроется WhatsApp с готовым сообщением для менеджера.</p>
+    </div>
+  </header>
+
+  <div class="container section" style="padding-top: 0;">
+    <div class="cart-layout" id="cart-root"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-copy">© 2026 HERMITAGE DECOR</div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const root = document.getElementById('cart-root');
+    const user = Store.user();
+
+    function renderCart() {
+      const cart = Store.cart();
+      if (!cart.length) {
+        root.innerHTML = `<div class="empty-state"><h2>Корзина пуста</h2><p>Добавьте товары для формирования заявки</p><a href="catalog.html" class="btn btn--primary" style="margin-top:20px;">В каталог</a></div>`;
+        return;
+      }
+
+      const items = cart.map((c) => {
+        const p = getProduct(c.id);
+        return p ? { ...p, qty: c.qty } : null;
+      }).filter(Boolean);
+
+      const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+
+      root.innerHTML = `
+        <div>
+          <div class="cart-list" id="cart-list">
+            ${items.map((item) => `
+              <div class="cart-item" data-id="${item.id}">
+                <a href="product.html?id=${item.id}" class="cart-item__img"><img src="${item.image}" alt="${item.name}" /></a>
+                <div class="cart-item__info">
+                  <h3><a href="product.html?id=${item.id}">${item.name}</a></h3>
+                  <p style="font-size:13px;color:var(--text-secondary);">${item.country} · ${item.factory}</p>
+                  <p class="product-card__price">${formatPrice(item.price)}</p>
+                  <div class="qty-control">
+                    <button type="button" data-qty-minus="${item.id}">−</button>
+                    <span>${item.qty}</span>
+                    <button type="button" data-qty-plus="${item.id}">+</button>
+                  </div>
+                  <button type="button" class="cart-remove" data-remove="${item.id}">Удалить</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <p style="font-size: 18px; margin-top: 16px;">Итого: <strong>${formatPrice(total)}</strong></p>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Окончательная стоимость уточняется менеджером</p>
+        </div>
+        <form class="checkout-form" id="checkout-form">
+          <h2 style="font-size: 24px; margin-bottom: 24px; font-family: var(--font-display);">Ваши данные</h2>
+          <div class="form-group">
+            <label for="firstName">Имя</label>
+            <input type="text" id="firstName" name="firstName" required value="${user?.firstName || ''}" />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Фамилия</label>
+            <input type="text" id="lastName" name="lastName" required value="${user?.lastName || ''}" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" name="phone" required placeholder="+7 (___) ___-__-__" value="${user?.phone || ''}" />
+          </div>
+          <button type="submit" class="btn btn--primary btn--block">Оформить заказ</button>
+          <p style="font-size: 11px; color: var(--text-secondary); margin-top: 16px; text-align: center;">Нажимая кнопку, вы перейдёте в WhatsApp для отправки заявки менеджеру</p>
+        </form>`;
+
+      root.querySelectorAll('[data-qty-minus]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.qtyMinus;
+          const item = Store.cart().find((c) => c.id === id);
+          if (item && item.qty > 1) Store.updateCartQty(id, item.qty - 1);
+          else Store.removeFromCart(id);
+          renderCart();
+        });
+      });
+      root.querySelectorAll('[data-qty-plus]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.qtyPlus;
+          const item = Store.cart().find((c) => c.id === id);
+          if (item) Store.updateCartQty(id, item.qty + 1);
+          renderCart();
+        });
+      });
+      root.querySelectorAll('[data-remove]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          Store.removeFromCart(btn.dataset.remove);
+          renderCart();
+        });
+      });
+
+      document.getElementById('checkout-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const firstName = fd.get('firstName').trim();
+        const lastName = fd.get('lastName').trim();
+        const phone = fd.get('phone').trim();
+        const orderItems = items.map((i) => ({ name: i.name, qty: i.qty }));
+        Store.addOrder({ firstName, lastName, phone, items: orderItems });
+        const url = buildWhatsAppUrl(firstName, lastName, phone, orderItems);
+        window.open(url, '_blank');
+        Store.setCart([]);
+        renderCart();
+      });
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

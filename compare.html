@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Сравнение — HERMITAGE DECOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page-back="catalog.html" data-page-title="Сравнение">
+  <header class="site-header site-header--solid">
+    <div class="site-header__inner">
+      <button class="nav-toggle" aria-label="Меню"><span></span><span></span><span></span></button>
+      <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="catalog.html">Каталог</a></li>
+          <li><a href="favorites.html">Избранное</a></li>
+          <li><a href="account.html">Личный кабинет</a></li>
+          <li><a href="cart.html">Корзина</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="cart.html" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span class="badge-count" data-cart-count hidden>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Сравнение товаров</h1>
+      <p style="color: var(--text-secondary); font-size: 14px; margin-top: 8px;">До 4 товаров. Добавляйте из карточки товара.</p>
+    </div>
+  </header>
+
+  <div class="container section" style="padding-top: 0;" id="compare-root"></div>
+
+  <footer class="site-footer"><div class="container footer-copy">© 2026 HERMITAGE DECOR</div></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const ids = Store.compare();
+    const products = ids.map(getProduct).filter(Boolean);
+    const root = document.getElementById('compare-root');
+
+    if (!products.length) {
+      root.innerHTML = '<div class="empty-state"><h2>Нет товаров для сравнения</h2><a href="catalog.html" class="btn btn--outline" style="margin-top:16px;">В каталог</a></div>';
+    } else {
+      const rows = [
+        ['Цена', ...products.map((p) => formatPrice(p.price))],
+        ['Страна', ...products.map((p) => p.country)],
+        ['Фабрика', ...products.map((p) => p.factory)],
+        ['Артикул', ...products.map((p) => p.sku)],
+        ['Размеры', ...products.map((p) => p.sizes)],
+        ['Материал', ...products.map((p) => p.material)],
+        ['Цвет', ...products.map((p) => p.color)],
+        ['Наличие', ...products.map((p) => (p.inStock ? 'В наличии' : 'Под заказ'))],
+      ];
+
+      const bindRemove = (container) => {
+        container.querySelectorAll('[data-remove-compare]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            Store.toggleCompare(btn.dataset.removeCompare);
+            location.reload();
+          });
+        });
+      };
+
+      root.innerHTML = `
+        <div class="compare-mobile">${renderCompareMobile(products)}</div>
+        <p class="scroll-hint scroll-hint--tablet">Прокрутите таблицу влево →</p>
+        <div class="compare-table-wrap compare-table-wrap--desktop">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th></th>
+                ${products.map((p) => `
+                  <th>
+                    <img class="compare-product-img" src="${p.image}" alt="${p.name}" />
+                    <a href="product.html?id=${p.id}">${p.name}</a>
+                    <button type="button" data-remove-compare="${p.id}" style="display:block;margin:8px auto 0;font-size:11px;border:none;background:none;cursor:pointer;text-decoration:underline;color:var(--text-secondary);">Убрать</button>
+                  </th>
+                `).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(([label, ...vals]) => `
+                <tr><td>${label}</td>${vals.map((v) => `<td>${v}</td>`).join('')}</tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>`;
+
+      bindRemove(root);
+    }
+  </script>
+</body>
+</html>
