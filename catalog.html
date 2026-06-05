@@ -40,7 +40,6 @@
   <header class="page-header"><div class="container"><h1 id="page-title">Каталог</h1></div></header>
 
   <div class="container catalog-layout">
-    <button type="button" class="filters-toggle" id="filters-open">Фильтры</button>
     <aside class="filters-panel" id="filters-panel">
       <button type="button" class="filters-panel__close" id="filters-close" aria-label="Закрыть">×</button>
       <form id="filters-form">
@@ -83,6 +82,7 @@
     <main class="catalog-main">
       <div id="catalog-categories"></div>
       <div class="catalog-toolbar">
+        <button type="button" class="filters-toggle" id="filters-open">Фильтры</button>
         <p id="results-count" style="font-size: 14px; color: var(--text-secondary);"></p>
         <select id="sort-select" aria-label="Сортировка">
           <option value="popular">По популярности</option>

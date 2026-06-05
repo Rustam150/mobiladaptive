@@ -104,10 +104,15 @@ const Store = {
 };
 
 function bindProductImageFallback(img, product) {
-  const fallback = productImgSrc(product);
-  img.addEventListener('error', () => {
-    if (img.src !== fallback) img.src = fallback;
-  }, { once: true });
+  const cat = HERMITAGE.categories.find((c) => c.id === product.category);
+  const fallback = cat?.image || product.image;
+  img.addEventListener(
+    'error',
+    () => {
+      if (img.src !== fallback) img.src = fallback;
+    },
+    { once: true }
+  );
 }
 
 function updateCompareButton(btn, productId) {
@@ -163,7 +168,6 @@ function productWhatsAppUrl(product) {
 
 function renderProductCard(product, opts = {}) {
   const isFav = Store.isFavorite(product.id);
-  const imgSrc = product.image || productImgSrc(product);
   const badge = product.isNew
     ? '<span class="badge badge--new">Новинка</span>'
     : product.isSale
@@ -172,7 +176,7 @@ function renderProductCard(product, opts = {}) {
   return `
     <article class="product-card" data-id="${product.id}">
       <a href="product.html?id=${product.id}" class="product-card__media">
-        <img src="${imgSrc}" alt="${product.name}" loading="lazy" data-product-id="${product.id}" />
+        <img src="${product.image}" alt="" loading="lazy" data-product-id="${product.id}" />
         ${badge}
       </a>
       <div class="product-card__body">

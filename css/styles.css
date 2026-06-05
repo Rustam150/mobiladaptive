@@ -452,8 +452,15 @@ img {
 /* PRODUCT GRID */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 769px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
+  }
 }
 
 .product-card {
@@ -473,9 +480,10 @@ img {
 .product-card__image,
 .product-card__media {
   display: block;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   position: relative;
+  background: #ece8e2;
 }
 
 .product-card__image img,
@@ -493,11 +501,10 @@ img {
   transform: scale(1.03);
 }
 
-.product-card__media .badge,
-.badge {
+.product-card__media .badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 8px;
   z-index: 1;
   font-size: 0.65rem;
   padding: 3px 10px;
@@ -521,8 +528,8 @@ img {
 
 .product-card__fav {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: -36px;
+  right: 8px;
   background: rgba(255, 255, 255, 0.92);
   border: none;
   width: 36px;
@@ -1063,11 +1070,13 @@ img {
   display: none;
   background: var(--white);
   border: 1px solid var(--border);
-  padding: 12px;
+  padding: 8px 16px;
   border-radius: 40px;
   font-weight: 500;
+  font-size: 0.85rem;
   cursor: pointer;
-  margin-bottom: 20px;
+  color: var(--text-dark);
+  flex-shrink: 0;
 }
 
 .filters-panel {
@@ -1110,7 +1119,8 @@ img {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 10px;
+  margin-top: 16px;
 }
 
 .catalog-categories {
@@ -1539,22 +1549,12 @@ body.filters-open {
     font-size: 0.8rem;
   }
 
-  .products-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
   .products-grid .product-card__body .btn {
     display: none;
   }
 
   .product-card {
     border-radius: 12px;
-  }
-
-  .product-card__media,
-  .product-card__image {
-    aspect-ratio: 1 / 1;
   }
 
   .product-card__body {
@@ -1581,10 +1581,10 @@ body.filters-open {
   }
 
   .product-card__fav {
-    width: 30px;
-    height: 30px;
-    top: 8px;
-    right: 8px;
+    width: 28px;
+    height: 28px;
+    top: -32px;
+    right: 6px;
   }
 
   .slider__track .product-card {
@@ -1622,8 +1622,7 @@ body.filters-open {
   }
 
   .filters-toggle {
-    width: 100%;
-    margin-bottom: 12px;
+    display: inline-block;
   }
 }
 
