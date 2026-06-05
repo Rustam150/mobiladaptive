@@ -1726,3 +1726,26 @@ body.filters-open {
   padding-right: 40px !important;
   text-align: center !important;
 }
+
+/* Исправление крестика - размер и положение */
+.categories-panel__close {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 18px !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 301 !important;
+}
+
+.categories-panel__close:hover {
+  background: rgba(0, 0, 0, 0.15) !important;
+}
