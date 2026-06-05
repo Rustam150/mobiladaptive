@@ -154,6 +154,22 @@ function closeMobileNav() {
   toggle?.setAttribute('aria-expanded', 'false');
 }
 
+function trackInternalNavigation() {
+  const path = location.pathname + location.search;
+  const current = sessionStorage.getItem('hd_current');
+  if (current && current !== path) {
+    sessionStorage.setItem('hd_back', current);
+  }
+  sessionStorage.setItem('hd_current', path);
+}
+
+function resolveBackUrl(fallback) {
+  const back = sessionStorage.getItem('hd_back');
+  const here = location.pathname + location.search;
+  if (back && back !== here) return back;
+  return fallback;
+}
+
 function initHeader() {
   const header = document.querySelector('.site-header');
   if (!header) return;
@@ -161,13 +177,39 @@ function initHeader() {
   const toggle = header.querySelector('.nav-toggle');
   const nav = header.querySelector('.site-nav');
   if (toggle && nav) {
+    if (!nav.querySelector('.nav-close')) {
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'nav-close';
+      closeBtn.setAttribute('aria-label', 'Закрыть меню');
+      closeBtn.textContent = '✕';
+      nav.insertBefore(closeBtn, nav.firstChild);
+    }
+
+    const openNav = () => {
+      nav.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('nav-open');
+    };
+
     toggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', open);
-      document.body.classList.toggle('nav-open', open);
+      if (nav.classList.contains('is-open')) closeMobileNav();
+      else openNav();
     });
+
+    nav.querySelector('.nav-close')?.addEventListener('click', closeMobileNav);
     nav.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', closeMobileNav);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('is-open')) return;
+      if (nav.contains(e.target) || toggle.contains(e.target)) return;
+      closeMobileNav();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobileNav();
     });
   }
 
@@ -190,9 +232,11 @@ function initHeader() {
     });
   }
 
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('is-scrolled', window.scrollY > 40);
-  }, { passive: true });
+  const onScroll = () => {
+    header.classList.toggle('is-scrolled', window.scrollY > 24);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   Store.updateBadges();
 }
@@ -203,17 +247,15 @@ function initMobilePageChrome() {
 
   document.body.classList.add('page-inner');
 
-  const title = (document.body.dataset.pageTitle || '').trim();
   const toolbar = document.createElement('nav');
   toolbar.className = 'page-toolbar';
   toolbar.setAttribute('aria-label', 'Навигация по странице');
   toolbar.innerHTML = `
     <div class="page-toolbar__inner container">
-      <a href="${fallback}" class="page-back" data-back-link>
+      <a href="${resolveBackUrl(fallback)}" class="page-back" data-back-link>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
         <span>Назад</span>
       </a>
-      ${title ? `<span class="page-toolbar__title">${title}</span>` : ''}
     </div>`;
 
   const header = document.querySelector('.site-header');
@@ -221,23 +263,21 @@ function initMobilePageChrome() {
 
   const backLink = toolbar.querySelector('[data-back-link]');
   backLink?.addEventListener('click', (e) => {
-    const ref = document.referrer;
-    if (!ref) return;
-    try {
-      const refUrl = new URL(ref);
-      if (refUrl.origin === location.origin && refUrl.href !== location.href) {
-        e.preventDefault();
-        history.back();
-      }
-    } catch (_) {
-      /* use fallback href */
+    e.preventDefault();
+    const target = resolveBackUrl(fallback);
+    const here = location.pathname + location.search;
+    if (target !== here) {
+      window.location.href = target;
+      return;
     }
+    if (window.history.length > 1) history.back();
+    else window.location.href = fallback;
   });
 }
 
 function setPageToolbarTitle(text) {
-  const el = document.querySelector('.page-toolbar__title');
-  if (el && text) el.textContent = text;
+  const heading = document.querySelector('.page-header h1, #page-title');
+  if (heading && text) heading.textContent = text;
 }
 
 function initCatalogFilters() {
@@ -441,6 +481,7 @@ function initAuthForms() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  trackInternalNavigation();
   initHeader();
   initMobilePageChrome();
   initCatalogFilters();

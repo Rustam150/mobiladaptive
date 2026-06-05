@@ -37,7 +37,6 @@
 
   <div class="search-panel"><div class="search-panel__box"><input type="search" id="global-search" placeholder="Поиск..." /><button type="button" class="btn btn--primary btn--sm" data-search-close>Закрыть</button></div></div>
 
-  <div class="breadcrumbs container"><a href="index.html">Главная</a> / Каталог</div>
   <header class="page-header"><div class="container"><h1 id="page-title">Каталог</h1></div></header>
 
   <div class="container catalog-layout">
@@ -192,11 +191,9 @@
     });
     if (params.country) form.elements.country.value = params.country;
     if (params.new) {
-      document.body.dataset.pageTitle = 'Новинки';
       document.getElementById('page-title').textContent = 'Новинки';
     }
     if (params.sale) {
-      document.body.dataset.pageTitle = 'Акции';
       document.getElementById('page-title').textContent = 'Акции';
     }
     render();

@@ -16,9 +16,9 @@ const HERMITAGE = {
   ],
 
   countries: [
-    { id: 'italy', name: 'Италия', image: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&q=80' },
-    { id: 'turkey', name: 'Турция', image: 'https://images.unsplash.com/photo-1616137468218-47f0b0e4b8c5?w=800&q=80' },
-    { id: 'china', name: 'Китай', image: 'https://images.unsplash.com/photo-1618210172014-fb796a7a6c3e?w=800&q=80' },
+    { id: 'italy', name: 'Италия', image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80' },
+    { id: 'turkey', name: 'Турция', image: 'https://images.unsplash.com/photo-1615874959470-d609969a20ed?w=600&q=80' },
+    { id: 'china', name: 'Китай', image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80' },
   ],
 
   brands: ['Poliform', 'Minotti', 'B&B Italia', 'Natuzzi', 'Roche Bobois', 'Flexform', 'Molteni&C', 'Cassina'],
