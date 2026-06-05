@@ -1678,3 +1678,26 @@ body.filters-open {
     width: 100%;
   }
 }
+
+/* Кнопка назад в мобильном меню категорий */
+.categories-panel__close {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: auto;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.categories-panel__close::before {
+  content: '←';
+  font-size: 18px;
+}

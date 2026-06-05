@@ -203,7 +203,7 @@
     }
     render();
 
-    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ =====
+    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (без эмодзи, с кнопкой "Назад") =====
     (function initMobileCategories() {
       const categoriesSection = document.getElementById('catalog-categories');
       if (!categoriesSection) return;
@@ -219,14 +219,13 @@
       panel.className = 'categories-panel';
       panel.id = 'mobileCategoriesPanel';
       panel.innerHTML = `
-        <button class="categories-panel__close" id="mobileCategoriesClose">✕</button>
+        <button class="categories-panel__close" id="mobileCategoriesClose">← Назад</button>
         <div class="categories-panel__title">Комнаты</div>
         <div class="categories-panel__grid" id="mobileCategoriesGrid"></div>
       `;
       
       const grid = panel.querySelector('#mobileCategoriesGrid');
       const links = existingScroll.querySelectorAll('.catalog-chip');
-      const emojis = { 'Все': '🏠', 'Спальня': '🛏️', 'Гостиная': '🛋️', 'Столовая': '🍽️', 'Кабинет': '📚', 'Кухня': '🍳', 'Прихожая': '🚪', 'Детская': '🧸', 'Мягкая мебель': '🪑' };
       
       links.forEach(link => {
         const name = link.textContent;
@@ -234,7 +233,7 @@
         item.href = link.href;
         item.className = 'categories-panel__item';
         if (link.classList.contains('is-active')) item.classList.add('active');
-        item.innerHTML = `<span class="categories-panel__item-icon">${emojis[name] || '📌'}</span><span class="categories-panel__item-name">${name}</span>`;
+        item.innerHTML = `<span class="categories-panel__item-name">${name}</span>`;
         item.addEventListener('click', () => panel.classList.remove('open'));
         grid.appendChild(item);
       });
