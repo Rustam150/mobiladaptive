@@ -269,3 +269,16 @@ function formatPrice(n) {
 function getProduct(id) {
   return HERMITAGE.products.find((p) => p.id === id);
 }
+
+function productImgSrc(product, w = 800, h = 1000) {
+  return `https://picsum.photos/seed/hermitage-${product.id}/${w}/${h}`;
+}
+
+HERMITAGE.products.forEach((p) => {
+  p.image = productImgSrc(p, 800, 1000);
+  p.images = [
+    `https://picsum.photos/seed/hermitage-${p.id}-1/1200/900`,
+    `https://picsum.photos/seed/hermitage-${p.id}-2/1200/900`,
+    `https://picsum.photos/seed/hermitage-${p.id}-3/1200/900`,
+  ];
+});

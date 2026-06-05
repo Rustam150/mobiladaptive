@@ -81,6 +81,7 @@
       </form>
     </aside>
     <main class="catalog-main">
+      <div id="catalog-categories"></div>
       <div class="catalog-toolbar">
         <p id="results-count" style="font-size: 14px; color: var(--text-secondary);"></p>
         <select id="sort-select" aria-label="Сортировка">
@@ -118,6 +119,8 @@
   <script>
     const params = getQueryParams();
     const form = document.getElementById('filters-form');
+
+    document.getElementById('catalog-categories').innerHTML = renderCatalogCategories(params.category || '');
 
     const countries = [...new Set(HERMITAGE.products.map((p) => p.country))];
     const factories = [...new Set(HERMITAGE.products.map((p) => p.factory))];
@@ -175,6 +178,7 @@
         : '<div class="empty-state" style="grid-column:1/-1;"><p>Товары не найдены</p></div>';
       document.getElementById('results-count').textContent = `${list.length} товаров`;
       initFavButtons(grid);
+      initProductCardImages(grid);
     }
 
     form.addEventListener('submit', (e) => {

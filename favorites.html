@@ -49,6 +49,7 @@
       }
       grid.innerHTML = list.map((p) => renderProductCard(p)).join('');
       initFavButtons(grid);
+      initProductCardImages(grid);
       grid.querySelectorAll('[data-fav]').forEach((btn) => {
         btn.addEventListener('click', () => setTimeout(renderFav, 50));
       });

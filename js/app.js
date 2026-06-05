@@ -87,12 +87,53 @@ const Store = {
   toggleCompare(id) {
     const list = Store.compare();
     const i = list.indexOf(id);
-    if (i >= 0) list.splice(i, 1);
-    else if (list.length < 4) list.push(id);
+    if (i >= 0) {
+      list.splice(i, 1);
+      Store.setCompare(list);
+      return false;
+    }
+    if (list.length >= 4) return false;
+    list.push(id);
     Store.setCompare(list);
-    return list.includes(id);
+    return true;
+  },
+
+  isInCompare(id) {
+    return Store.compare().includes(id);
   },
 };
+
+function bindProductImageFallback(img, product) {
+  const fallback = productImgSrc(product);
+  img.addEventListener('error', () => {
+    if (img.src !== fallback) img.src = fallback;
+  }, { once: true });
+}
+
+function updateCompareButton(btn, productId) {
+  if (Store.isInCompare(productId)) {
+    btn.textContent = 'В сравнении';
+    btn.classList.add('is-active');
+    btn.dataset.mode = 'open';
+  } else {
+    btn.textContent = 'Сравнить';
+    btn.classList.remove('is-active');
+    btn.dataset.mode = 'add';
+  }
+}
+
+function handleCompareClick(btn, productId) {
+  if (btn.dataset.mode === 'open') {
+    window.location.href = 'compare.html';
+    return;
+  }
+  const added = Store.toggleCompare(productId);
+  if (!added && !Store.isInCompare(productId)) {
+    alert('Можно сравнить не более 4 товаров. Откройте раздел «Сравнение» и уберите лишнее.');
+    return;
+  }
+  updateCompareButton(btn, productId);
+}
 
 function buildWhatsAppUrl(firstName, lastName, phone, items) {
   const lines = items.map((p) => `- ${p.name}${p.qty > 1 ? ` (×${p.qty})` : ''}`);
@@ -122,6 +163,7 @@ function productWhatsAppUrl(product) {
 
 function renderProductCard(product, opts = {}) {
   const isFav = Store.isFavorite(product.id);
+  const imgSrc = product.image || productImgSrc(product);
   const badge = product.isNew
     ? '<span class="badge badge--new">Новинка</span>'
     : product.isSale
@@ -130,7 +172,7 @@ function renderProductCard(product, opts = {}) {
   return `
     <article class="product-card" data-id="${product.id}">
       <a href="product.html?id=${product.id}" class="product-card__media">
-        <img src="${product.image}" alt="${product.name}" loading="lazy" />
+        <img src="${imgSrc}" alt="${product.name}" loading="lazy" data-product-id="${product.id}" />
         ${badge}
       </a>
       <div class="product-card__body">
@@ -154,20 +196,73 @@ function closeMobileNav() {
   toggle?.setAttribute('aria-expanded', 'false');
 }
 
+function getNavStack() {
+  try {
+    return JSON.parse(sessionStorage.getItem('hd_nav_stack') || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function setNavStack(stack) {
+  sessionStorage.setItem('hd_nav_stack', JSON.stringify(stack.slice(-30)));
+}
+
 function trackInternalNavigation() {
   const path = location.pathname + location.search;
-  const current = sessionStorage.getItem('hd_current');
-  if (current && current !== path) {
-    sessionStorage.setItem('hd_back', current);
+  let stack = getNavStack();
+
+  if (sessionStorage.getItem('hd_back_nav') === '1') {
+    sessionStorage.removeItem('hd_back_nav');
+    if (!stack.length || stack[stack.length - 1] !== path) stack.push(path);
+    setNavStack(stack);
+    return;
   }
-  sessionStorage.setItem('hd_current', path);
+
+  if (stack[stack.length - 1] !== path) stack.push(path);
+  setNavStack(stack);
 }
 
 function resolveBackUrl(fallback) {
-  const back = sessionStorage.getItem('hd_back');
+  const stack = getNavStack();
   const here = location.pathname + location.search;
-  if (back && back !== here) return back;
+  let idx = stack.length - 1;
+  if (idx >= 0 && stack[idx] === here) idx -= 1;
+  if (idx >= 0) return stack[idx];
   return fallback;
+}
+
+function navigateBack(fallback) {
+  sessionStorage.setItem('hd_back_nav', '1');
+  const stack = getNavStack();
+  const here = location.pathname + location.search;
+  if (stack.length && stack[stack.length - 1] === here) stack.pop();
+  const prev = stack.length ? stack[stack.length - 1] : null;
+  setNavStack(stack);
+  window.location.href = prev || fallback;
+}
+
+function renderCatalogCategories(activeCategory = '') {
+  const chips = [
+    { id: '', name: 'Все', href: 'catalog.html' },
+    ...HERMITAGE.categories.map((c) => ({
+      id: c.id,
+      name: c.name,
+      href: `catalog.html?category=${c.id}`,
+    })),
+  ];
+  return `
+    <div class="catalog-categories" role="navigation" aria-label="Комнаты">
+      <p class="catalog-categories__label">Комнаты</p>
+      <div class="catalog-categories__scroll">
+        ${chips
+          .map(
+            (c) =>
+              `<a href="${c.href}" class="catalog-chip${activeCategory === c.id ? ' is-active' : ''}">${c.name}</a>`
+          )
+          .join('')}
+      </div>
+    </div>`;
 }
 
 function initHeader() {
@@ -264,14 +359,14 @@ function initMobilePageChrome() {
   const backLink = toolbar.querySelector('[data-back-link]');
   backLink?.addEventListener('click', (e) => {
     e.preventDefault();
-    const target = resolveBackUrl(fallback);
-    const here = location.pathname + location.search;
-    if (target !== here) {
-      window.location.href = target;
-      return;
-    }
-    if (window.history.length > 1) history.back();
-    else window.location.href = fallback;
+    navigateBack(fallback);
+  });
+}
+
+function initProductCardImages(root = document) {
+  root.querySelectorAll('.product-card__media img[data-product-id]').forEach((img) => {
+    const product = getProduct(img.dataset.productId);
+    if (product) bindProductImageFallback(img, product);
   });
 }
 
@@ -309,32 +404,6 @@ function initCatalogFilters() {
   backdrop.addEventListener('click', close);
 }
 
-function renderCompareMobile(products) {
-  return products
-    .map(
-      (p) => `
-    <article class="compare-mobile-card" data-id="${p.id}">
-      <div class="compare-mobile-card__head">
-        <img src="${p.image}" alt="" />
-        <div>
-          <h3><a href="product.html?id=${p.id}">${p.name}</a></h3>
-          <p class="text-accent" style="margin-top:6px;">${formatPrice(p.price)}</p>
-          <button type="button" data-remove-compare="${p.id}" class="cart-remove" style="margin-top:8px;">Убрать</button>
-        </div>
-      </div>
-      <dl>
-        <dt>Страна</dt><dd>${p.country}</dd>
-        <dt>Фабрика</dt><dd>${p.factory}</dd>
-        <dt>Артикул</dt><dd>${p.sku}</dd>
-        <dt>Размеры</dt><dd>${p.sizes}</dd>
-        <dt>Материал</dt><dd>${p.material}</dd>
-        <dt>Цвет</dt><dd>${p.color}</dd>
-        <dt>Наличие</dt><dd>${p.inStock ? 'В наличии' : 'Под заказ'}</dd>
-      </dl>
-    </article>`
-    )
-    .join('');
-}
 
 function initFavButtons(root = document) {
   root.querySelectorAll('[data-fav]').forEach((btn) => {
@@ -486,6 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobilePageChrome();
   initCatalogFilters();
   initFavButtons();
+  initProductCardImages();
   initSliders();
   initAuthForms();
   Store.updateBadges();

@@ -108,6 +108,7 @@
       if (favProducts.length) {
         favGrid.innerHTML = favProducts.map((p) => renderProductCard(p)).join('');
         initFavButtons(favGrid);
+        initProductCardImages(favGrid);
       } else {
         favGrid.innerHTML = '<div class="empty-state"><p>Избранное пусто</p></div>';
       }

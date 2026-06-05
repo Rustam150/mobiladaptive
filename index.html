@@ -215,10 +215,12 @@
     const popular = HERMITAGE.products.filter((p) => p.popular);
     document.getElementById('popular-slider').innerHTML = popular.map((p) => renderProductCard(p)).join('');
     initFavButtons(document.getElementById('popular-slider'));
+    initProductCardImages(document.getElementById('popular-slider'));
 
     const newest = HERMITAGE.products.filter((p) => p.isNew).slice(0, 4);
     document.getElementById('new-products').innerHTML = newest.map((p) => renderProductCard(p)).join('');
     initFavButtons(document.getElementById('new-products'));
+    initProductCardImages(document.getElementById('new-products'));
 
     const brandsHtml = [...HERMITAGE.brands, ...HERMITAGE.brands]
       .map((b) => `<span class="brand-item">${b}</span>`)
