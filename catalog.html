@@ -203,7 +203,7 @@
     }
     render();
 
-    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (крестик вместо "Назад") =====
+     // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (с гарантированным крестиком) =====
     (function initMobileCategories() {
       const categoriesSection = document.getElementById('catalog-categories');
       if (!categoriesSection) return;
@@ -218,11 +218,38 @@
       const panel = document.createElement('div');
       panel.className = 'categories-panel';
       panel.id = 'mobileCategoriesPanel';
-      panel.innerHTML = `
-        <button class="categories-panel__close" id="mobileCategoriesClose">✕</button>
-        <div class="categories-panel__title">Комнаты</div>
-        <div class="categories-panel__grid" id="mobileCategoriesGrid"></div>
+      
+      // Создаём крестик отдельно и добавляем стили прямо в JS
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = '✕';
+      closeBtn.setAttribute('aria-label', 'Закрыть');
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.08);
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+        color: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 301;
       `;
+      
+      panel.innerHTML = `
+        <div style="position: relative; padding: 8px 0;">
+          <div class="categories-panel__title" style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e5e0d8;">Комнаты</div>
+        </div>
+        <div class="categories-panel__grid" id="mobileCategoriesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;"></div>
+      `;
+      
+      // Добавляем крестик в панель
+      panel.querySelector('div').prepend(closeBtn);
       
       const grid = panel.querySelector('#mobileCategoriesGrid');
       const links = existingScroll.querySelectorAll('.catalog-chip');
@@ -233,7 +260,16 @@
         item.href = link.href;
         item.className = 'categories-panel__item';
         if (link.classList.contains('is-active')) item.classList.add('active');
-        item.innerHTML = `<span class="categories-panel__item-name">${name}</span>`;
+        item.innerHTML = `<span style="display: block; padding: 16px 8px; background: #faf8f5; border-radius: 16px; border: 1px solid #e5e0d8; text-align: center;">${name}</span>`;
+        item.style.textDecoration = 'none';
+        item.style.color = '#1a1a1a';
+        if (link.classList.contains('is-active')) {
+          item.style.backgroundColor = '#b89a6b';
+          item.style.color = 'white';
+          item.querySelector('span').style.background = '#b89a6b';
+          item.querySelector('span').style.borderColor = '#b89a6b';
+          item.querySelector('span').style.color = 'white';
+        }
         item.addEventListener('click', () => panel.classList.remove('open'));
         grid.appendChild(item);
       });
@@ -242,7 +278,7 @@
       categoriesSection.insertBefore(toggleBtn, categoriesSection.firstChild);
       
       toggleBtn.addEventListener('click', () => panel.classList.add('open'));
-      document.getElementById('mobileCategoriesClose').addEventListener('click', () => panel.classList.remove('open'));
+      closeBtn.addEventListener('click', () => panel.classList.remove('open'));
       panel.addEventListener('click', (e) => { if (e.target === panel) panel.classList.remove('open'); });
     })();
   </script>
