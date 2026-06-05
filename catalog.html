@@ -203,7 +203,7 @@
     }
     render();
 
-    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (без эмодзи, с кнопкой "Назад") =====
+    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (крестик вместо "Назад") =====
     (function initMobileCategories() {
       const categoriesSection = document.getElementById('catalog-categories');
       if (!categoriesSection) return;
@@ -219,7 +219,7 @@
       panel.className = 'categories-panel';
       panel.id = 'mobileCategoriesPanel';
       panel.innerHTML = `
-        <button class="categories-panel__close" id="mobileCategoriesClose">← Назад</button>
+        <button class="categories-panel__close" id="mobileCategoriesClose">✕</button>
         <div class="categories-panel__title">Комнаты</div>
         <div class="categories-panel__grid" id="mobileCategoriesGrid"></div>
       `;
