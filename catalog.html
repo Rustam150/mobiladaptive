@@ -203,7 +203,7 @@
     }
     render();
 
-     // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (с гарантированным крестиком) =====
+         // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (принудительные стили для крестика) =====
     (function initMobileCategories() {
       const categoriesSection = document.getElementById('catalog-categories');
       if (!categoriesSection) return;
@@ -218,38 +218,13 @@
       const panel = document.createElement('div');
       panel.className = 'categories-panel';
       panel.id = 'mobileCategoriesPanel';
-      
-      // Создаём крестик отдельно и добавляем стили прямо в JS
-      const closeBtn = document.createElement('button');
-      closeBtn.textContent = '✕';
-      closeBtn.setAttribute('aria-label', 'Закрыть');
-      closeBtn.style.cssText = `
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(0,0,0,0.08);
-        border: none;
-        font-size: 22px;
-        cursor: pointer;
-        color: #1a1a1a;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 301;
-      `;
-      
       panel.innerHTML = `
         <div style="position: relative; padding: 8px 0;">
-          <div class="categories-panel__title" style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e5e0d8;">Комнаты</div>
+          <button class="categories-panel__close" id="mobileCategoriesClose" style="position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,0.1); border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+          <div class="categories-panel__title" style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; text-align: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e5e0d8;">Комнаты</div>
         </div>
         <div class="categories-panel__grid" id="mobileCategoriesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;"></div>
       `;
-      
-      // Добавляем крестик в панель
-      panel.querySelector('div').prepend(closeBtn);
       
       const grid = panel.querySelector('#mobileCategoriesGrid');
       const links = existingScroll.querySelectorAll('.catalog-chip');
@@ -278,7 +253,7 @@
       categoriesSection.insertBefore(toggleBtn, categoriesSection.firstChild);
       
       toggleBtn.addEventListener('click', () => panel.classList.add('open'));
-      closeBtn.addEventListener('click', () => panel.classList.remove('open'));
+      document.getElementById('mobileCategoriesClose').addEventListener('click', () => panel.classList.remove('open'));
       panel.addEventListener('click', (e) => { if (e.target === panel) panel.classList.remove('open'); });
     })();
   </script>
