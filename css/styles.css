@@ -1725,10 +1725,10 @@ body.filters-open {
   }
 }
 
-/* Исправление надписи МЕНЮ в бургере */
+/* Исправление надписи МЕНЮ в бургере - сдвиг вниз */
 @media (max-width: 992px) {
   .site-nav::before {
-    left: 80px !important;
-    top: 32px !important;
+    top: 60px !important;
+    left: 32px !important;
   }
 }
