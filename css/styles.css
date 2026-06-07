@@ -1724,3 +1724,11 @@ body.filters-open {
     width: 100%;
   }
 }
+
+/* Исправление надписи МЕНЮ в бургере */
+@media (max-width: 992px) {
+  .site-nav::before {
+    left: 80px !important;
+    top: 32px !important;
+  }
+}
