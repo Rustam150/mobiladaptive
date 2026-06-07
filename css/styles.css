@@ -264,7 +264,7 @@ img {
   .site-nav::before {
     content: "МЕНЮ";
     position: absolute;
-    top: 32px;
+    top: 60px;
     left: 32px;
     font-size: 0.7rem;
     letter-spacing: 3px;
@@ -1419,30 +1419,27 @@ body.filters-open {
   transform: translateX(0);
 }
 
-/* КРЕСТИК - ИТОГОВЫЙ ИСПРАВЛЕННЫЙ ВАРИАНТ */
+/* КРЕСТИК - ФИНАЛЬНАЯ ВЕРСИЯ */
 .categories-panel__close {
-  position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  left: auto !important;
-  bottom: auto !important;
-  width: 32px !important;
-  height: 32px !important;
-  font-size: 16px !important;
-  background: rgba(0, 0, 0, 0.08) !important;
-  border: none !important;
-  border-radius: 50% !important;
-  cursor: pointer !important;
-  color: var(--text-dark) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 301 !important;
-  transition: all 0.2s ease !important;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.08);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .categories-panel__close:hover {
-  background: rgba(0, 0, 0, 0.15) !important;
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .categories-panel__title {
@@ -1452,7 +1449,8 @@ body.filters-open {
   margin-bottom: 24px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
-  padding-right: 40px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .categories-panel__grid {
@@ -1722,13 +1720,5 @@ body.filters-open {
 
   .btn-group .btn {
     width: 100%;
-  }
-}
-
-/* Исправление надписи МЕНЮ в бургере - сдвиг вниз */
-@media (max-width: 992px) {
-  .site-nav::before {
-    top: 60px !important;
-    left: 32px !important;
   }
 }
