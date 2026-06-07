@@ -197,61 +197,90 @@ img {
   text-align: center;
 }
 
-/* МОБИЛЬНОЕ МЕНЮ */
-.nav-close {
-  display: none;
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 28px;
-  cursor: pointer;
-  color: var(--text-dark);
-}
-
+/* ===== ПРЕМИАЛЬНОЕ БУРГЕР-МЕНЮ ===== */
 @media (max-width: 992px) {
   .nav-toggle {
     display: flex;
+    width: 32px;
+    height: 24px;
   }
 
-  .nav-close {
-    display: flex;
+  .nav-toggle span {
+    background: currentColor;
+    height: 2px;
+    border-radius: 2px;
+    transition: all 0.3s ease;
   }
 
   .site-nav {
     position: fixed;
     top: 0;
-    left: -100%;
-    width: 85%;
-    max-width: 320px;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
     height: 100vh;
-    background: var(--white);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
     margin: 0;
-    padding: 80px 24px 32px;
-    transition: left 0.3s ease;
+    padding: 100px 32px 40px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-100%);
     z-index: 101;
-    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
   }
 
   .site-nav.is-open {
-    left: 0;
+    transform: translateX(0);
   }
 
   .site-nav ul {
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-nav li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 12px;
   }
 
   .site-nav a {
-    font-size: 1.1rem;
-    color: var(--text-dark) !important;
-    white-space: normal;
+    font-size: 1.3rem;
+    font-weight: 400;
+    font-family: var(--font-display);
+    color: rgba(255, 255, 255, 0.85) !important;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    display: block;
   }
 
   .site-nav a:hover {
     color: var(--gold) !important;
+    transform: translateX(8px);
+  }
+
+  /* Заголовок МЕНЮ */
+  .site-nav::before {
+    content: "МЕНЮ";
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* Декоративная линия */
+  .site-nav::after {
+    content: '';
+    position: absolute;
+    bottom: 30px;
+    left: 32px;
+    width: 50px;
+    height: 1px;
+    background: var(--gold);
   }
 
   body.nav-open {
@@ -262,12 +291,17 @@ img {
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.6);
     z-index: 100;
+    backdrop-filter: blur(3px);
   }
 
   .site-header__inner {
     padding: 12px 20px;
+  }
+
+  .nav-close {
+    display: none;
   }
 }
 
@@ -1385,24 +1419,40 @@ body.filters-open {
   transform: translateX(0);
 }
 
+/* КРЕСТИК - ИТОГОВЫЙ ИСПРАВЛЕННЫЙ ВАРИАНТ */
 .categories-panel__close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 28px;
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 16px !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  color: var(--text-dark) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 301 !important;
+  transition: all 0.2s ease !important;
+}
+
+.categories-panel__close:hover {
+  background: rgba(0, 0, 0, 0.15) !important;
 }
 
 .categories-panel__title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  text-align: center;
   margin-bottom: 24px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+  padding-right: 40px;
 }
 
 .categories-panel__grid {
@@ -1420,6 +1470,7 @@ body.filters-open {
   text-decoration: none;
   color: var(--text-dark);
   transition: var(--transition);
+  display: block;
 }
 
 .categories-panel__item.active {
@@ -1428,14 +1479,9 @@ body.filters-open {
   color: white;
 }
 
-.categories-panel__item-icon {
-  font-size: 28px;
-  display: block;
-  margin-bottom: 8px;
-}
-
 .categories-panel__item-name {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
@@ -1677,75 +1723,4 @@ body.filters-open {
   .btn-group .btn {
     width: 100%;
   }
-}
-
-/* Кнопка закрытия (крестик) в мобильном меню категорий */
-.categories-panel__close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  left: auto;
-  background: none;
-  border: none;
-  font-size: 28px;
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
-  color: var(--text-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ===== ИСПРАВЛЕНИЕ КРЕСТИКА В МЕНЮ КОМНАТ (только CSS) ===== */
-.categories-panel__close {
-  position: absolute !important;
-  top: 12px !important;
-  right: 12px !important;
-  left: auto !important;
-  bottom: auto !important;
-  background: rgba(0, 0, 0, 0.08) !important;
-  border: none !important;
-  font-size: 20px !important;
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  cursor: pointer !important;
-  color: var(--text-dark) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 301 !important;
-}
-
-.categories-panel__close:hover {
-  background: rgba(0, 0, 0, 0.15) !important;
-}
-
-.categories-panel__title {
-  padding-right: 40px !important;
-  text-align: center !important;
-}
-
-/* Исправление крестика - размер и положение */
-.categories-panel__close {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  left: auto !important;
-  bottom: auto !important;
-  width: 32px !important;
-  height: 32px !important;
-  font-size: 18px !important;
-  background: rgba(0, 0, 0, 0.08) !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  z-index: 301 !important;
-}
-
-.categories-panel__close:hover {
-  background: rgba(0, 0, 0, 0.15) !important;
 }
