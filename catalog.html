@@ -203,7 +203,7 @@
     }
     render();
 
-                // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (с правильным крестиком) =====
+                    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (ГАРАНТИРОВАННЫЙ КРЕСТИК) =====
     (function initMobileCategories() {
       const categoriesSection = document.getElementById('catalog-categories');
       if (!categoriesSection) return;
@@ -211,56 +211,56 @@
       const existingScroll = categoriesSection.querySelector('.catalog-categories__scroll');
       if (!existingScroll) return;
 
+      // Кнопка "Выбрать комнату"
       const toggleBtn = document.createElement('button');
       toggleBtn.className = 'categories-menu-toggle';
-      toggleBtn.innerHTML = 'Выбрать комнату <span>▼</span>';
+      toggleBtn.innerHTML = 'Выбрать комнату <span style="font-size: 12px;">▼</span>';
+      toggleBtn.style.cssText = 'width:100%; background:white; border:1px solid #e5e0d8; padding:12px 16px; border-radius:40px; font-size:0.9rem; font-weight:500; display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;';
       
+      // Панель
       const panel = document.createElement('div');
-      panel.className = 'categories-panel';
       panel.id = 'mobileCategoriesPanel';
+      panel.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:white; z-index:9999; transform:translateX(100%); transition:transform 0.3s ease; padding:50px 20px 20px; overflow-y:auto;';
       
+      // Внутренности панели
       panel.innerHTML = `
-        <div class="categories-panel__header">
-          <div class="categories-panel__title">Комнаты</div>
-          <button class="categories-panel__close" id="mobileCategoriesClose">✕</button>
+        <div style="position:relative; text-align:center; margin-bottom:24px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size:1.5rem; font-weight:500; border-bottom:1px solid #e5e0d8; padding-bottom:12px;">Комнаты</div>
+          <button id="closeCatPanel" style="position:absolute; top:0; right:0; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,0.08); border:none; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
         </div>
-        <div class="categories-panel__grid" id="mobileCategoriesGrid"></div>
+        <div id="categoriesGrid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px;"></div>
       `;
       
-      const grid = panel.querySelector('#mobileCategoriesGrid');
+      const grid = panel.querySelector('#categoriesGrid');
       const links = existingScroll.querySelectorAll('.catalog-chip');
       
       links.forEach(link => {
         const name = link.textContent;
+        const isActive = link.classList.contains('is-active');
         const item = document.createElement('a');
         item.href = link.href;
-        item.className = 'categories-panel__item';
-        if (link.classList.contains('is-active')) item.classList.add('active');
-        item.innerHTML = `<span class="categories-panel__item-name">${name}</span>`;
-        item.addEventListener('click', () => panel.classList.remove('open'));
+        item.style.cssText = 'display:block; padding:16px 8px; background:#faf8f5; border-radius:16px; border:1px solid #e5e0d8; text-align:center; text-decoration:none; color:#1a1a1a; font-size:0.9rem;' + (isActive ? ' background:#b89a6b; color:white; border-color:#b89a6b;' : '');
+        item.textContent = name;
+        item.addEventListener('click', () => {
+          panel.style.transform = 'translateX(100%)';
+        });
         grid.appendChild(item);
       });
-      
-      panel.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: white;
-        z-index: 300;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        padding: 60px 20px 20px;
-        overflow-y: auto;
-      `;
       
       document.body.appendChild(panel);
       categoriesSection.insertBefore(toggleBtn, categoriesSection.firstChild);
       
-      toggleBtn.addEventListener('click', () => panel.classList.add('open'));
-      document.getElementById('mobileCategoriesClose').addEventListener('click', () => panel.classList.remove('open'));
-      panel.addEventListener('click', (e) => { if (e.target === panel) panel.classList.remove('open'); });
+      toggleBtn.addEventListener('click', () => {
+        panel.style.transform = 'translateX(0)';
+      });
+      
+      panel.querySelector('#closeCatPanel').addEventListener('click', () => {
+        panel.style.transform = 'translateX(100%)';
+      });
+      
+      panel.addEventListener('click', (e) => {
+        if (e.target === panel) panel.style.transform = 'translateX(100%)';
+      });
     })();
   </script>
 </body>
