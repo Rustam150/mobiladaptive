@@ -8,6 +8,27 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  
+  <!-- ДОБАВЛЕНО: Стили для крестика, чтобы он точно был виден -->
+  <style>
+    @media (max-width: 992px) {
+      .nav-close {
+        display: block !important;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 32px;
+        cursor: pointer;
+        z-index: 103;
+      }
+      .site-nav.is-open {
+        transform: translateX(0) !important;
+      }
+    }
+  </style>
 </head>
 <body data-page-back="index.html" data-page-title="Каталог">
   <header class="site-header site-header--solid">
@@ -15,6 +36,7 @@
       <button class="nav-toggle" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
       <a href="index.html" class="logo">HERMITAGE<span>DECOR</span></a>
       <nav class="site-nav">
+        <!-- КРЕСТИК ДЛЯ ЗАКРЫТИЯ МЕНЮ -->
         <button class="nav-close" aria-label="Закрыть меню">✕</button>
         <ul>
           <li><a href="catalog.html">Каталог</a></li>
@@ -118,6 +140,7 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
+    // 1. Основная логика каталога
     const params = getQueryParams();
     const form = document.getElementById('filters-form');
 
@@ -195,34 +218,23 @@
       window.location.href = 'catalog.html';
     });
     if (params.country) form.elements.country.value = params.country;
-    if (params.new) {
-      document.getElementById('page-title').textContent = 'Новинки';
-    }
-    if (params.sale) {
-      document.getElementById('page-title').textContent = 'Акции';
-    }
     render();
 
-                    // ===== МОБИЛЬНОЕ МЕНЮ КАТЕГОРИЙ (ГАРАНТИРОВАННЫЙ КРЕСТИК) =====
+    // 2. Логика мобильного меню категорий (Комнаты)
     (function initMobileCategories() {
       const categoriesSection = document.getElementById('catalog-categories');
       if (!categoriesSection) return;
-
       const existingScroll = categoriesSection.querySelector('.catalog-categories__scroll');
       if (!existingScroll) return;
 
-      // Кнопка "Выбрать комнату"
       const toggleBtn = document.createElement('button');
       toggleBtn.className = 'categories-menu-toggle';
       toggleBtn.innerHTML = 'Выбрать комнату <span style="font-size: 12px;">▼</span>';
-      toggleBtn.style.cssText = 'width:100%; background:white; border:1px solid #e5e0d8; padding:12px 16px; border-radius:40px; font-size:0.9rem; font-weight:500; display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:16px;';
       
-      // Панель
       const panel = document.createElement('div');
       panel.id = 'mobileCategoriesPanel';
       panel.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:white; z-index:9999; transform:translateX(100%); transition:transform 0.3s ease; padding:50px 20px 20px; overflow-y:auto;';
       
-      // Внутренности панели
       panel.innerHTML = `
         <div style="position:relative; text-align:center; margin-bottom:24px;">
           <div style="font-family: 'Cormorant Garamond', serif; font-size:1.5rem; font-weight:500; border-bottom:1px solid #e5e0d8; padding-bottom:12px;">Комнаты</div>
@@ -262,6 +274,43 @@
         if (e.target === panel) panel.style.transform = 'translateX(100%)';
       });
     })();
+
+    // 3. ИСПРАВЛЕННАЯ ЛОГИКА БУРГЕР-МЕНЮ (КРЕСТИК)
+    document.addEventListener('DOMContentLoaded', () => {
+      const navToggle = document.querySelector('.nav-toggle');
+      const siteNav = document.querySelector('.site-nav');
+      const navClose = document.querySelector('.nav-close');
+      const body = document.body;
+
+      function toggleMenu() {
+        if (siteNav.classList.contains('is-open')) {
+          siteNav.classList.remove('is-open');
+          body.classList.remove('nav-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        } else {
+          siteNav.classList.add('is-open');
+          body.classList.add('nav-open');
+          navToggle.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      if (navToggle) navToggle.addEventListener('click', toggleMenu);
+      if (navClose) navClose.addEventListener('click', toggleMenu);
+      
+      // Закрытие при клике на затемненный фон
+      body.addEventListener('click', (e) => {
+        if (body.classList.contains('nav-open') && !siteNav.contains(e.target) && !navToggle.contains(e.target)) {
+          toggleMenu();
+        }
+      });
+
+      // Закрытие по клавише Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && siteNav.classList.contains('is-open')) {
+          toggleMenu();
+        }
+      });
+    });
   </script>
 </body>
 </html>
